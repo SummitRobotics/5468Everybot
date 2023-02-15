@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drivetrain.ArcadeDrive;
 import frc.robot.oi.drivers.ControllerDriver;
-import frc.robot.oi.drivers.JoystickDriver;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.lists.Ports;
 
@@ -23,7 +22,6 @@ public class RobotContainer {
   private final AHRS gyro;
   private final Drivetrain drivetrain;
   private final ArcadeDrive arcadeDrive;
-  private final JoystickDriver j;
 
   /**
    * Autonomous selection options.
@@ -144,10 +142,10 @@ public class RobotContainer {
 
   public void teleopPeriodic() {
     double armPower;
-    if (j.button7.getTrigger().getAsBoolean()) {
+    if (controller.buttonB.getTrigger().getAsBoolean()) {
       // lower the arm
       armPower = -ARM_OUTPUT_POWER;
-    } else if (j.button5.getTrigger().getAsBoolean()) {
+    } else if (controller.buttonA.getTrigger().getAsBoolean()) {
       // raise the arm
       armPower = ARM_OUTPUT_POWER;
     } else {
@@ -158,12 +156,12 @@ public class RobotContainer {
   
     double intakePower;
     int intakeAmps;
-    if (j.button8.getTrigger().getAsBoolean()) {
+    if (controller.buttonX.getTrigger().getAsBoolean()) {
       // cube in or cone out
       intakePower = INTAKE_OUTPUT_POWER;
       intakeAmps = INTAKE_CURRENT_LIMIT_A;
       lastGamePiece = CUBE;
-    } else if (j.button6.getTrigger().getAsBoolean()) {
+    } else if (controller.buttonY.getTrigger().getAsBoolean()) {
       // cone in or cube out
       intakePower = -INTAKE_OUTPUT_POWER;
       intakeAmps = INTAKE_CURRENT_LIMIT_A;
@@ -188,7 +186,6 @@ public class RobotContainer {
     controller = new ControllerDriver(Ports.OI.XBOX_PORT);
     gyro = new AHRS();
     drivetrain = new Drivetrain(gyro);
-    j = new JoystickDriver(Ports.OI.JOYSTICK_PORT);
 
     arcadeDrive = new ArcadeDrive(
       drivetrain,
@@ -251,6 +248,4 @@ public class RobotContainer {
     SmartDashboard.putNumber("intake motor current (amps)", intake.getOutputCurrent());
     SmartDashboard.putNumber("intake motor temperature (C)", intake.getMotorTemperature());
   }
-
-
 }
