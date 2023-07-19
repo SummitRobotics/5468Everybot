@@ -10,18 +10,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.drivetrain.ArcadeDrive;
-import frc.robot.oi.drivers.ControllerDriver;
+import com.summitrobotics.common.commands.SwerveArcade;
+import com.summitrobotics.common.oi.drivers.ControllerDriver;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.utilities.lists.Ports;
 
 public class RobotContainer {
 
   private final ControllerDriver controller;
   private final AHRS gyro;
   private final Drivetrain drivetrain;
-  private final ArcadeDrive arcadeDrive;
+  private final SwerveArcade arcadeDrive;
 
   /**
    * Autonomous selection options.
@@ -142,10 +140,10 @@ public class RobotContainer {
 
   public void teleopPeriodic() {
     double armPower;
-    if (controller.buttonB.getTrigger().getAsBoolean()) {
+    if (controller.leftBumper.getTrigger().getAsBoolean()) {
       // lower the arm
       armPower = -ARM_OUTPUT_POWER;
-    } else if (controller.buttonA.getTrigger().getAsBoolean()) {
+    } else if (controller.rightBumper.getTrigger().getAsBoolean()) {
       // raise the arm
       armPower = ARM_OUTPUT_POWER;
     } else {
@@ -183,29 +181,25 @@ public class RobotContainer {
   public RobotContainer() {
 
     m_autoSelected = m_chooser.getSelected();
-    controller = new ControllerDriver(Ports.OI.XBOX_PORT);
+    controller = new ControllerDriver(0);
     gyro = new AHRS();
     drivetrain = new Drivetrain(gyro);
 
-    arcadeDrive = new ArcadeDrive(
+    arcadeDrive = new SwerveArcade(
       drivetrain,
-      controller.rightTrigger,
-      controller.leftTrigger,
+      controller.leftY,
       controller.leftX,
-      controller.dPadAny
+      controller.rightX,
+      controller.dPadDown,
+      controller.buttonA,
+      controller.buttonB
     );
 
     setDefaultCommands();
-    configureBindings();
   }
 
   private void setDefaultCommands() {
     drivetrain.setDefaultCommand(arcadeDrive);
-  }
-
-  private void configureBindings() {
-    controller.rightBumper.getTrigger().onTrue(new InstantCommand(drivetrain::highGear));
-    controller.leftBumper.getTrigger().onTrue(new InstantCommand(drivetrain::lowGear));
   }
 
   public Command getAutonomousCommand() {
