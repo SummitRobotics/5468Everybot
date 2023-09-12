@@ -1,11 +1,11 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import com.summitrobotics.common.swerve.Swerve;
 import com.summitrobotics.common.swerve.SwerveConstellation;
 import com.summitrobotics.common.swerve.SwerveModule;
@@ -48,5 +48,17 @@ public class Drivetrain extends Swerve {
 
   public void stop() {
     this.drive(new ChassisSpeeds(0, 0, 0));
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    super.initSendable(builder);
+    // For AdvantageScope swerve visualizer; see https://github.com/Mechanical-Advantage/AdvantageScope/blob/main/docs/tabs/SWERVE.md.
+    builder.addDoubleArrayProperty("Module States", () -> new double[] {
+      mod0.getState().angle.getRadians(), mod0.getState().speedMetersPerSecond,
+      mod1.getState().angle.getRadians(), mod1.getState().speedMetersPerSecond,
+      mod2.getState().angle.getRadians(), mod2.getState().speedMetersPerSecond,
+      mod3.getState().angle.getRadians(), mod3.getState().speedMetersPerSecond,
+    }, null);
   }
 }

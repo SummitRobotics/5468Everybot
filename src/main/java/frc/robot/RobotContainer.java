@@ -5,6 +5,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -195,6 +197,7 @@ public class RobotContainer {
       controller.buttonB
     );
 
+    initTelemetry();
     setDefaultCommands();
   }
 
@@ -241,5 +244,16 @@ public class RobotContainer {
     SmartDashboard.putNumber("intake power (%)", percent);
     SmartDashboard.putNumber("intake motor current (amps)", intake.getOutputCurrent());
     SmartDashboard.putNumber("intake motor temperature (C)", intake.getMotorTemperature());
+  }
+
+  private void initTelemetry() {
+    SmartDashboard.putData("Drivetrain", drivetrain);
+    SmartDashboard.putData("Intake", new Sendable() {
+      @Override
+      public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty("Intake Velocity", intake.getEncoder()::getVelocity, null);
+        builder.addDoubleProperty("Arm Position", arm.getEncoder()::getPosition, null);
+      }
+    });
   }
 }
