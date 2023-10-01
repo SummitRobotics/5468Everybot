@@ -41,17 +41,21 @@ public class RobotContainer {
             controller.rightX,
             controller.dPadDown,
             controller.buttonA,
-            controller.buttonB
+            controller.dPadUp
         );
 
         intakeDefault = new IntakeDefault(
             intake,
-            controller.leftBumper,
-            controller.rightBumper,
+            controller.rightY,
             launchpad.funLeft,
             launchpad.funRight,
             controller.buttonX,
-            controller.buttonY
+            controller.buttonY,
+            launchpad.buttonA,
+            launchpad.buttonB,
+            launchpad.buttonC,
+            launchpad.buttonD,
+            launchpad.buttonE
         );
 
         initTelemetry();

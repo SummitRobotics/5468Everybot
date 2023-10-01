@@ -1,14 +1,15 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-    public enum State {
+    public static enum State {
         HOLD,
         INTAKE,
         EJECT;
@@ -18,7 +19,7 @@ public class Intake extends SubsystemBase {
         }
     }
 
-    public enum GamePiece {
+    public static enum GamePiece {
         CONE,
         CUBE,
         NONE;
@@ -28,9 +29,26 @@ public class Intake extends SubsystemBase {
         }
     }
 
+    // TODO - tune these values
+    public static enum Preset {
+        HIGH(0),
+        MID(0),
+        LOW(0),
+        // CONE and QUORB are substation positions
+        CONE(0),
+        QUORB(0),
+        HOME(0);
+
+        public double encoderPos;
+        Preset(double encoderPos) {
+            this.encoderPos = encoderPos;
+        }
+    }
+
     private CANSparkMax arm, intake;
     private State state;
     private GamePiece gamePiece;
+    private SparkMaxPIDController armController;
 
     public static final int
         ARM_CURRENT_LIMIT = 20,
@@ -45,6 +63,12 @@ public class Intake extends SubsystemBase {
     public Intake() {
         arm = new CANSparkMax(5, MotorType.kBrushless);
         intake = new CANSparkMax(6, MotorType.kBrushless);
+        // TODO - tune these and figure out if feedforward is necessary
+        armController = arm.getPIDController();
+        armController.setP(0.3);
+        armController.setI(0);
+        armController.setD(0);
+        armController.setReference(Preset.HOME.encoderPos, ControlType.kPosition);
         state = State.INTAKE;
         gamePiece = GamePiece.NONE;
 
@@ -63,8 +87,13 @@ public class Intake extends SubsystemBase {
         this.gamePiece = gamePiece;
     }
 
-    public void setArm(double speed) {
-        arm.set(speed);
+    public void setArm(Preset preset, double trim) {
+        // TODO - tune trim value
+        armController.setReference(preset.encoderPos + 5 * trim, ControlType.kPosition);
+    }
+
+    public void setArm(Preset preset) {
+        armController.setReference(preset.encoderPos, ControlType.kPosition);
     }
 
     @Override
