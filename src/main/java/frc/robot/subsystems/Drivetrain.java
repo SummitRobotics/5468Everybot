@@ -24,13 +24,13 @@ public class Drivetrain extends Swerve {
         SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0, 3);
 
         mod0 = new SwerveModuleBuilder(new Translation2d(67.6 / 2, 58.7 / 2), SWERVE_MODULE_PRESETS.SDS_MK4i_L2)
-          .driveNEO1650(16).turnNEO1650(15).CANCoder(25, -2.6215732).driveFeedforward(feedforward).drivePID(DRIVE_PID).build();
+          .driveNEO1650(16).turnNEO1650(17).CANCoder(25, 0.628).driveFeedforward(feedforward).drivePID(DRIVE_PID).build();
         mod1 = new SwerveModuleBuilder(new Translation2d(-67.6 / 2, 58.7 / 2), SWERVE_MODULE_PRESETS.SDS_MK4i_L2)
-        .driveNEO1650(14).turnNEO1650(13).CANCoder(23, 2.630777).driveFeedforward(feedforward).drivePID(DRIVE_PID).build();
+        .driveNEO1650(14).turnNEO1650(13).CANCoder(23, -2.358 - 29 * Math.PI / 180).driveFeedforward(feedforward).drivePID(DRIVE_PID).build();
         mod2 = new SwerveModuleBuilder(new Translation2d(67.6 / 2, -58.7 / 2), SWERVE_MODULE_PRESETS.SDS_MK4i_L2)
-          .driveNEO1650(18).turnNEO1650(17).CANCoder(27, -1.20893).driveFeedforward(feedforward).drivePID(DRIVE_PID).build();
+          .driveNEO1650(12).turnNEO1650(11).CANCoder(27, 15.815 - 0.785).driveFeedforward(feedforward).drivePID(DRIVE_PID).build();
         mod3 = new SwerveModuleBuilder(new Translation2d(-67.6 / 2, -58.7 / 2), SWERVE_MODULE_PRESETS.SDS_MK4i_L2)
-          .driveNEO1650(12).turnNEO1650(11).CANCoder(21, 0.050602).driveFeedforward(feedforward).drivePID(DRIVE_PID).build();
+          .driveNEO1650(20).turnNEO1650(51).CANCoder(21, -0.803).driveFeedforward(feedforward).drivePID(DRIVE_PID).build();
     
         constellation = new SwerveConstellation(mod0, mod1, mod2, mod3);
         this.gyro = gyro;
@@ -60,11 +60,15 @@ public class Drivetrain extends Swerve {
             mod2.getState().angle.getRadians(), mod2.getState().speedMetersPerSecond,
             mod3.getState().angle.getRadians(), mod3.getState().speedMetersPerSecond,
         }, null);
-        builder.addDoubleArrayProperty("Target Module States", () -> new double[] {
-            mod0.getTargetState().angle.getRadians(), mod0.getTargetState().speedMetersPerSecond,
-            mod1.getTargetState().angle.getRadians(), mod1.getTargetState().speedMetersPerSecond,
-            mod2.getTargetState().angle.getRadians(), mod2.getTargetState().speedMetersPerSecond,
-            mod3.getTargetState().angle.getRadians(), mod3.getTargetState().speedMetersPerSecond
-        }, null);
+        builder.addDoubleProperty("Upper Right Heading", () -> mod0.getState().angle.getRadians(), null);
+        builder.addDoubleProperty("Upper Left Heading", () -> mod1.getState().angle.getRadians(), null);
+        builder.addDoubleProperty("Bottom Right Heading", () -> mod2.getState().angle.getRadians(), null);
+        builder.addDoubleProperty("Botton Left Heading", () -> mod3.getState().angle.getRadians(), null);
+        // builder.addDoubleArrayProperty("Target Module States", () -> new double[] {
+            // mod0.getTargetState().angle.getRadians(), mod0.getTargetState().speedMetersPerSecond,
+            // mod1.getTargetState().angle.getRadians(), mod1.getTargetState().speedMetersPerSecond,
+            // mod2.getTargetState().angle.getRadians(), mod2.getTargetState().speedMetersPerSecond,
+            // mod3.getTargetState().angle.getRadians(), mod3.getTargetState().speedMetersPerSecond
+        // }, null);
     }
 }

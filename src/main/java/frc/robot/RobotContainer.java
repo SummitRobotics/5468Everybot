@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,9 +21,9 @@ public class RobotContainer {
     private final LaunchpadDriver launchpad;
     private final AHRS gyro;
     private final Drivetrain drivetrain;
-    private final Intake intake;
+    // private final Intake intake;
     private final SwerveArcade arcadeDrive;
-    private final IntakeDefault intakeDefault;
+    // private final IntakeDefault intakeDefault;
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
@@ -31,7 +32,7 @@ public class RobotContainer {
         launchpad = new LaunchpadDriver(1);
         gyro = new AHRS();
         drivetrain = new Drivetrain(gyro);
-        intake = new Intake();
+        // intake = new Intake();
         autoChooser = new SendableChooser<Command>();
 
         arcadeDrive = new SwerveArcade(
@@ -44,19 +45,19 @@ public class RobotContainer {
             controller.dPadUp
         );
 
-        intakeDefault = new IntakeDefault(
-            intake,
-            controller.rightY,
-            launchpad.funLeft,
-            launchpad.funRight,
-            controller.buttonX,
-            controller.buttonY,
-            launchpad.buttonA,
-            launchpad.buttonB,
-            launchpad.buttonC,
-            launchpad.buttonD,
-            launchpad.buttonE
-        );
+        // intakeDefault = new IntakeDefault(
+            // intake,
+            // controller.rightY,
+            // launchpad.funLeft,
+            // launchpad.funRight,
+            // controller.buttonX,
+            // controller.buttonY,
+            // launchpad.buttonA,
+            // launchpad.buttonB,
+            // launchpad.buttonC,
+            // launchpad.buttonD,
+            // launchpad.buttonE
+        // );
 
         initTelemetry();
         setDefaultCommands();
@@ -64,8 +65,8 @@ public class RobotContainer {
     }
 
     private void setDefaultCommands() {
-        drivetrain.setDefaultCommand(arcadeDrive);
-        intake.setDefaultCommand(intakeDefault);
+        // drivetrain.setDefaultCommand(arcadeDrive);
+        // intake.setDefaultCommand(intakeDefault);
     }
 
     public Command getAutonomousCommand() {
@@ -79,13 +80,13 @@ public class RobotContainer {
     }
 
     public void robotPeriodic() {
-        SmartDashboard.putNumber("Time (seconds)", Timer.getFPGATimestamp());
+        // SmartDashboard.putNumber("Time (seconds)", Timer.getFPGATimestamp());
     }
 
     private void initTelemetry() {
         SmartDashboard.putData("Drivetrain", drivetrain);
-        SmartDashboard.putData("Intake", intake);
-        SmartDashboard.putData("Auto Choice", autoChooser);
+        // SmartDashboard.putData("Intake", intake);
+        // SmartDashboard.putData("Auto Choice", autoChooser);
     }
 
     private void createAutoCommands() {
@@ -94,6 +95,8 @@ public class RobotContainer {
 
     public void autonomousInit() {}
     public void autonomousPeriodic() {}
-    public void teleopInit() {}
+    public void teleopInit() {
+        drivetrain.drive(new ChassisSpeeds(0, 0.25, 0));
+    }
     public void teleopPeriodic() {}
 }
