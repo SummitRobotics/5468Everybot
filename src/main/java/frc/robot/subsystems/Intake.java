@@ -61,14 +61,14 @@ public class Intake extends SubsystemBase {
         INTAKE_HOLD_POWER = 0.07;
 
     public Intake() {
-        arm = new CANSparkMax(5, MotorType.kBrushless);
-        intake = new CANSparkMax(6, MotorType.kBrushless);
+        arm = new CANSparkMax(15, MotorType.kBrushless);
+        intake = new CANSparkMax(60, MotorType.kBrushless);
         // TODO - tune these and figure out if feedforward is necessary
         armController = arm.getPIDController();
         armController.setP(0.3);
         armController.setI(0);
         armController.setD(0);
-        armController.setReference(Preset.HOME.encoderPos, ControlType.kPosition);
+        // armController.setReference(Preset.HOME.encoderPos, ControlType.kPosition);
         state = State.INTAKE;
         gamePiece = GamePiece.NONE;
 
@@ -96,6 +96,10 @@ public class Intake extends SubsystemBase {
         armController.setReference(preset.encoderPos, ControlType.kPosition);
     }
 
+    public void setArm(double speed) {
+        arm.set(speed);
+    }
+
     @Override
     public void periodic() {
         if (gamePiece == GamePiece.CUBE) {
@@ -103,6 +107,7 @@ public class Intake extends SubsystemBase {
         } else if (gamePiece == GamePiece.CONE) {
             intake.set(state == State.INTAKE ? -INTAKE_OUTPUT_POWER : state == State.HOLD ? -INTAKE_HOLD_POWER : INTAKE_OUTPUT_POWER);
         } else {
+            System.out.println("doing nothing");
             intake.set(0);
         }
         intake.setSmartCurrentLimit(state == State.HOLD ? INTAKE_HOLD_CURRENT_LIMIT : INTAKE_CURRENT_LIMIT);
