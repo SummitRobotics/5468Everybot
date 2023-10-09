@@ -15,7 +15,7 @@ import com.summitrobotics.common.swerve.SwerveModuleBuilder.SWERVE_MODULE_PRESET
 public class Drivetrain extends Swerve {
     private SwerveConstellation constellation;
     public SwerveModule mod0, mod1, mod2, mod3;
-    private AHRS gyro;
+    public AHRS gyro;
     public static final double DRIVE_P = 0.1, DRIVE_I = 0, DRIVE_D = 0;
     public static final double[] DRIVE_PID = new double[] {DRIVE_P, DRIVE_I, DRIVE_D};
 
@@ -24,13 +24,13 @@ public class Drivetrain extends Swerve {
         SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0, 3);
 
         mod0 = new SwerveModuleBuilder(new Translation2d(67.6 / 2, 58.7 / 2), SWERVE_MODULE_PRESETS.SDS_MK4i_L2)
-          .driveNEO1650(16).turnNEO1650(17).CANCoder(25, 0.628 - Math.PI / 2 - 0.06981 - 0.0349).driveFeedforward(feedforward).drivePID(DRIVE_PID).build(); //good
+          .driveNEO1650(16).turnNEO1650(17).CANCoder(25, 0.628 - Math.PI / 2 - 0.06981 - 0.0349 - 44 * Math.PI / 180).driveFeedforward(feedforward).drivePID(DRIVE_PID).build(); //good
         mod1 = new SwerveModuleBuilder(new Translation2d(-67.6 / 2, 58.7 / 2), SWERVE_MODULE_PRESETS.SDS_MK4i_L2)
         .driveNEO1650(14).turnNEO1650(13).CANCoder(23, -2.358 - 29 * Math.PI / 180 - 0.785398).driveFeedforward(feedforward).drivePID(DRIVE_PID).build(); //good
         mod2 = new SwerveModuleBuilder(new Translation2d(67.6 / 2, -58.7 / 2), SWERVE_MODULE_PRESETS.SDS_MK4i_L2)
-          .driveNEO1650(12).turnNEO1650(11).CANCoder(27, -1.2391837 + 1.91986 + 0.1047197551).driveFeedforward(feedforward).drivePID(DRIVE_PID).build();
+          .driveNEO1650(12).turnNEO1650(11).CANCoder(27, -1.2391837 + 1.91986 + 0.1047197551 - 60.5 * Math.PI / 180).driveFeedforward(feedforward).drivePID(DRIVE_PID).build();
         mod3 = new SwerveModuleBuilder(new Translation2d(-67.6 / 2, -58.7 / 2), SWERVE_MODULE_PRESETS.SDS_MK4i_L2)
-          .driveNEO1650(20).turnNEO1650(51).CANCoder(21, -0.803 + 0.785398 + 0.06981).driveFeedforward(feedforward).drivePID(DRIVE_PID).build(); //good
+          .driveNEO1650(20).turnNEO1650(51).CANCoder(21, -0.803 + 0.785398 + 0.06981 - 4.5 * Math.PI / 180).driveFeedforward(feedforward).drivePID(DRIVE_PID).build(); //good
     
         constellation = new SwerveConstellation(mod0, mod1, mod2, mod3);
         this.gyro = gyro;

@@ -51,7 +51,7 @@ public class IntakeDefault extends CommandBase {
             }
         }
         intake.setPiece(gamePiece);
-        intake.setState(take.get() ? State.INTAKE : eject.get() ? State.EJECT : State.HOLD);
+        intake.setState(take.get() ? State.INTAKE : (eject.get() ? State.EJECT : State.HOLD));
     }
 
     @Override

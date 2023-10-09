@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
         EJECT;
 
         public String toString() {
-            return this == HOLD ? "Hold" : this == INTAKE ? "INTAKE" : "Eject";
+            return this == HOLD ? "Hold" : (this == INTAKE ? "INTAKE" : "Eject");
         }
     }
 
@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase {
         NONE;
 
         public String toString() {
-            return this == CONE ? "Cone" : this == CUBE ? "Cube" : "None";
+            return this == CONE ? "Cone" : (this == CUBE ? "Cube" : "None");
         }
     }
 
@@ -57,7 +57,7 @@ public class Intake extends SubsystemBase {
 
     public static final double
         ARM_POWER = 0.4,
-        INTAKE_OUTPUT_POWER = 1.0,
+        INTAKE_OUTPUT_POWER = 0.85,
         INTAKE_HOLD_POWER = 0.07;
 
     public Intake() {
@@ -103,11 +103,11 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         if (gamePiece == GamePiece.CUBE) {
-            intake.set(state == State.INTAKE ? INTAKE_OUTPUT_POWER : state == State.HOLD ? INTAKE_HOLD_POWER : -INTAKE_OUTPUT_POWER);
+            intake.set(state == State.INTAKE ? INTAKE_OUTPUT_POWER : (state == State.HOLD ? INTAKE_HOLD_POWER : -INTAKE_OUTPUT_POWER));
         } else if (gamePiece == GamePiece.CONE) {
-            intake.set(state == State.INTAKE ? -INTAKE_OUTPUT_POWER : state == State.HOLD ? -INTAKE_HOLD_POWER : INTAKE_OUTPUT_POWER);
+            intake.set(state == State.INTAKE ? -INTAKE_OUTPUT_POWER : (state == State.HOLD ? -INTAKE_HOLD_POWER : INTAKE_OUTPUT_POWER));
         } else {
-            System.out.println("doing nothing");
+            // System.out.println("doing nothing");
             intake.set(0);
         }
         intake.setSmartCurrentLimit(state == State.HOLD ? INTAKE_HOLD_CURRENT_LIMIT : INTAKE_CURRENT_LIMIT);
@@ -123,7 +123,7 @@ public class Intake extends SubsystemBase {
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("Intake Velocity", intake.getEncoder()::getVelocity, null);
         builder.addDoubleProperty("Arm Position", arm.getEncoder()::getPosition, null);
-        builder.addStringProperty("Game Piece", gamePiece::toString, null);
-        builder.addStringProperty("State", state::toString, null);
+        builder.addStringProperty("Game Piece", () -> gamePiece.toString(), null);
+        builder.addStringProperty("State", () -> state.toString(), null);
     }
 }
