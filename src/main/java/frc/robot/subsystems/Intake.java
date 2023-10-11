@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -96,6 +97,14 @@ public class Intake extends SubsystemBase {
         armController.setReference(preset.encoderPos, ControlType.kPosition);
     }
 
+    public double getArmCurrent() {
+        return arm.getOutputCurrent();
+    }
+
+    public RelativeEncoder getArmEncoder() {
+        return arm.getEncoder();
+    }
+
     public void setArm(double speed) {
         arm.set(speed);
     }
@@ -122,6 +131,7 @@ public class Intake extends SubsystemBase {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("Intake Velocity", intake.getEncoder()::getVelocity, null);
+        builder.addDoubleProperty("Arm Current", () -> getArmCurrent(), null);
         builder.addDoubleProperty("Arm Position", arm.getEncoder()::getPosition, null);
         builder.addStringProperty("Game Piece", () -> gamePiece.toString(), null);
         builder.addStringProperty("State", () -> state.toString(), null);
