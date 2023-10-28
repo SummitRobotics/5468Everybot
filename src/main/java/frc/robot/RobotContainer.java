@@ -38,6 +38,7 @@ public class RobotContainer {
 
         arcadeDrive = new SwerveArcade(
             drivetrain,
+            gyro,
             controller.leftY,
             controller.leftX,
             controller.rightX,
@@ -88,6 +89,8 @@ public class RobotContainer {
             public void initSendable(SendableBuilder builder) {
                 builder.addDoubleProperty("Right X", controller.rightX::get, null);
                 builder.addDoubleProperty("Right Y", controller.rightY::get, null);
+                builder.addDoubleProperty("Left X", controller.leftX::get, null);
+                builder.addDoubleProperty("Left Y", controller.leftY::get, null);
             }
         });
         SmartDashboard.putData("Intake", intake);
