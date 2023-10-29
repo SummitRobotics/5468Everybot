@@ -3,7 +3,6 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -14,6 +13,7 @@ import com.summitrobotics.common.commands.SwerveArcade;
 import com.summitrobotics.common.oi.drivers.ControllerDriver;
 import frc.robot.commands.IntakeDefault;
 import frc.robot.commands.autos.PlaceMove;
+import frc.robot.commands.autos.TurnStressTest;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Intake.GamePiece;
@@ -101,13 +101,13 @@ public class RobotContainer {
         autoChooser.setDefaultOption("Do Nothing", new PrintCommand("Did nothing!"));
         autoChooser.addOption("Place and Move Quorb", new PlaceMove(drivetrain, intake, GamePiece.CUBE));
         autoChooser.addOption("Place and Move Cone", new PlaceMove(drivetrain, intake, GamePiece.CONE));
+        autoChooser.addOption("Turn Stress Test", new TurnStressTest(drivetrain));
     }
 
     public void autonomousInit() {}
     public void autonomousPeriodic() {}
-    public void teleopInit() {
-        // drivetrain.drive(new ChassisSpeeds(0, 0.25, 0));
-    }
+    public void teleopInit() {}
+
     public void teleopPeriodic() {
         // System.out.println("Gyro rotation: " + drivetrain.getGyroscopeRotation());
     }
