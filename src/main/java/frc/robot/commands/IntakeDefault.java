@@ -3,20 +3,16 @@ package frc.robot.commands;
 import com.summitrobotics.common.oi.inputs.OITrigger;
 import com.summitrobotics.common.oi.inputs.OITrigger.PrioritizedTrigger;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Intake.GamePiece;
-import frc.robot.subsystems.Intake.Preset;
-import frc.robot.subsystems.Intake.State;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem.GamePiece;
+import frc.robot.subsystems.intake.IntakeSubsystem.State;
 
 public class IntakeDefault extends CommandBase {
     private PrioritizedTrigger take, eject, up, down, pieceToggle;
-    // private PrioritizedAxis trim;
-    private Intake intake;
-    private Preset preset;
-    private GamePiece gamePiece;
+    private IntakeSubsystem intake;
     
     public IntakeDefault(
-        Intake intake,
+        IntakeSubsystem intake,
         OITrigger up,
         OITrigger down,
         OITrigger pieceToggle,
@@ -29,8 +25,6 @@ public class IntakeDefault extends CommandBase {
         this.take = take.prioritize(0);
         this.eject = eject.prioritize(0);
         this.pieceToggle = pieceToggle.prioritize(0);
-        preset = Preset.HOME;
-        gamePiece = GamePiece.CUBE;
         addRequirements(intake);
     }
 
@@ -41,12 +35,12 @@ public class IntakeDefault extends CommandBase {
 
     @Override
     public void execute() {
-        // preset = low.get() ? Preset.LOW : mid.get() ? Preset.MID : high.get() ? Preset.HIGH : quorb.get() ? Preset.QUORB : cone.get() ? Preset.CONE : Preset.HOME;
         intake.setArm((up.get() ? 0.75 : 0) - (down.get() ? 0.25 : 0));
+        GamePiece gamePiece = intake.getPiece();
         if (pieceToggle.get()) {
-            if (gamePiece == GamePiece.CONE) {
+            if (intake.getPiece() == GamePiece.CONE) {
                 gamePiece = GamePiece.CUBE;
-            } else if (gamePiece == GamePiece.CUBE) {
+            } else if (intake.getPiece() == GamePiece.CUBE) {
                 gamePiece = GamePiece.CONE;
             }
         }
@@ -57,7 +51,6 @@ public class IntakeDefault extends CommandBase {
     @Override
     public void end(final boolean interrupted) {
         intake.stop();
-        // trim.destroy();
         take.destroy();
         eject.destroy();
         pieceToggle.destroy();

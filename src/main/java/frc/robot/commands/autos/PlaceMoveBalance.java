@@ -8,23 +8,22 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.autos.ChargeBalance.BalanceDirection;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Intake.GamePiece;
-import frc.robot.subsystems.Intake.Preset;
-import frc.robot.subsystems.Intake.State;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem.GamePiece;
+import frc.robot.subsystems.intake.IntakeSubsystem.State;
 
 public class PlaceMoveBalance extends SequentialCommandGroup {
-    public PlaceMoveBalance(Drivetrain drivetrain, Intake intake, AHRS gyro, GamePiece piece) {
+    public PlaceMoveBalance(Drivetrain drivetrain, IntakeSubsystem intake, AHRS gyro, GamePiece piece) {
         addCommands(
             new InstantCommand(() -> {
                 intake.setPiece(piece);
                 intake.setState(State.HOLD);
-                intake.setArm(Preset.HIGH);
+                // intake.setArm(Preset.HIGH);
             }),
             new WaitCommand(1),
             new InstantCommand(() -> {
                 intake.setState(State.EJECT);
-                intake.setArm(Preset.HOME);
+                // intake.setArm(Preset.HOME);
                 drivetrain.drive(new ChassisSpeeds(0, -1, 0));
             }),
             new WaitUntilCommand(() -> Math.abs(gyro.getRoll()) > 8),
