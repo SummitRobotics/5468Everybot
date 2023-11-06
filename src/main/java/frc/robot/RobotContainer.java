@@ -1,10 +1,16 @@
 package frc.robot;
 
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -71,6 +77,20 @@ public class RobotContainer {
     }
 
     public void robotInit() {
+        // AdvantageKit setup, per instructions at https://github.com/Mechanical-Advantage/AdvantageKit/blob/main/docs/INSTALLATION.md
+        Logger.recordMetadata("ProjectName", "5468Everybot"); // Set a metadata value
+
+        if (RobotBase.isReal()) {
+            Logger.addDataReceiver(new WPILOGWriter("/U")); // Log to a USB stick
+            Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+        } else {
+            String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
+            Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+            Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+        }
+
+        Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
+
         gyro.calibrate();
         gyro.reset();
         gyro.setAngleAdjustment(180);
