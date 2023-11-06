@@ -5,12 +5,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Intake.GamePiece;
-import frc.robot.subsystems.Intake.State;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem.GamePiece;
 
 public class PlaceMove extends SequentialCommandGroup {
-    public PlaceMove(Drivetrain drivetrain, Intake intake, GamePiece piece) {
+    public PlaceMove(Drivetrain drivetrain, IntakeSubsystem intake, GamePiece piece) {
         addCommands(
             new InstantCommand(() -> {
                 // intake.setPiece(piece);
