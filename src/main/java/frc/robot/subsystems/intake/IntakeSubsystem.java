@@ -89,11 +89,11 @@ public class IntakeSubsystem extends SubsystemBase {
         Logger.getInstance().recordOutput("Intake/GamePiece", gamePiece.toString());
 
         if (gamePiece == GamePiece.CUBE) {
-            io.setArm(state == State.INTAKE ? INTAKE_OUTPUT_POWER : (state == State.HOLD ? INTAKE_HOLD_POWER : -INTAKE_OUTPUT_POWER));
+            io.setIntake(state == State.INTAKE ? INTAKE_OUTPUT_POWER : (state == State.HOLD ? INTAKE_HOLD_POWER : -INTAKE_OUTPUT_POWER));
         } else if (gamePiece == GamePiece.CONE) {
-            io.setArm(state == State.INTAKE ? -INTAKE_OUTPUT_POWER : (state == State.HOLD ? -INTAKE_HOLD_POWER : INTAKE_OUTPUT_POWER));
+            io.setIntake(state == State.INTAKE ? -INTAKE_OUTPUT_POWER : (state == State.HOLD ? -INTAKE_HOLD_POWER : INTAKE_OUTPUT_POWER));
         } else {
-            io.setArm(0);
+            io.setIntake(0);
         }
         io.setIntakeCurrentLimit(state == State.HOLD ? INTAKE_HOLD_CURRENT_LIMIT : INTAKE_CURRENT_LIMIT);
     }

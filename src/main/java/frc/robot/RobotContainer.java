@@ -85,18 +85,18 @@ public class RobotContainer {
 
     public void robotInit() {
         // AdvantageKit setup, per instructions at https://github.com/Mechanical-Advantage/AdvantageKit/blob/main/docs/INSTALLATION.md
-        Logger.getInstance().recordMetadata("ProjectName", "5468Everybot"); // Set a metadata value
+        // Logger.getInstance().recordMetadata("ProjectName", "5468Everybot"); // Set a metadata value
 
-        if (Robot.isReal()) {
-            Logger.getInstance().addDataReceiver(new WPILOGWriter("/U")); // Log to a USB stick
-            Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-        } else {
-            String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
-            Logger.getInstance().setReplaySource(new WPILOGReader(logPath)); // Read replay log
-            Logger.getInstance().addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
-        }
+        // if (Robot.isReal()) {
+            // Logger.getInstance().addDataReceiver(new WPILOGWriter("/U")); // Log to a USB stick
+            // Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+        // } else {
+            // String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
+            // Logger.getInstance().setReplaySource(new WPILOGReader(logPath)); // Read replay log
+            // Logger.getInstance().addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+        // }
 
-        Logger.getInstance().start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
+        // Logger.getInstance().start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
 
         gyro.calibrate();
         gyro.reset();
