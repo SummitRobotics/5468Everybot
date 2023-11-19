@@ -1,10 +1,5 @@
 package frc.robot;
 
-import org.littletonrobotics.junction.LogFileUtil;
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGReader;
-import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,6 +11,7 @@ import com.summitrobotics.common.commands.SwerveArcade;
 import com.summitrobotics.common.oi.drivers.ControllerDriver;
 import frc.robot.commands.IntakeDefault;
 import frc.robot.commands.autos.PlaceMove;
+import frc.robot.commands.autos.PathPlannerTest;
 import frc.robot.commands.autos.TurnStressTest;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.intake.IntakeIOHardware;
@@ -84,20 +80,6 @@ public class RobotContainer {
     }
 
     public void robotInit() {
-        // AdvantageKit setup, per instructions at https://github.com/Mechanical-Advantage/AdvantageKit/blob/main/docs/INSTALLATION.md
-        // Logger.getInstance().recordMetadata("ProjectName", "5468Everybot"); // Set a metadata value
-
-        // if (Robot.isReal()) {
-            // Logger.getInstance().addDataReceiver(new WPILOGWriter("/U")); // Log to a USB stick
-            // Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-        // } else {
-            // String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
-            // Logger.getInstance().setReplaySource(new WPILOGReader(logPath)); // Read replay log
-            // Logger.getInstance().addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
-        // }
-
-        // Logger.getInstance().start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
-
         gyro.calibrate();
         gyro.reset();
         gyro.setAngleAdjustment(180);
@@ -119,6 +101,7 @@ public class RobotContainer {
         autoChooser.addOption("Place and Move Quorb", new PlaceMove(drivetrain, intake, GamePiece.CUBE));
         autoChooser.addOption("Place and Move Cone", new PlaceMove(drivetrain, intake, GamePiece.CONE));
         autoChooser.addOption("Turn Stress Test", new TurnStressTest(drivetrain));
+        autoChooser.addOption("PathPlannerTest", new PathPlannerTest(drivetrain));
     }
 
     public void autonomousInit() {}
