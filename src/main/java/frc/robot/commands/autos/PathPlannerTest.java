@@ -9,9 +9,9 @@ import frc.robot.subsystems.Drivetrain;
 
 public class PathPlannerTest extends SequentialCommandGroup {
     public PathPlannerTest(Drivetrain drivetrain) {
-        PathPlannerTrajectory traj = PathPlanner.loadPath("Test", new PathConstraints(0.75, 0.5));
+        PathPlannerTrajectory traj = PathPlanner.loadPath("Test", new PathConstraints(0.1, 0.05));
         addCommands(
-            new FollowPathPlannerTrajectory(drivetrain, traj, false, false, new double[] {5, 0, 0}, new double[] {5, 0, 0})
+            new FollowPathPlannerTrajectory(drivetrain, traj,true, false, new double[] {0.05, 0, 0}, new double[] {0.05, 0, 0})
         );
     }
     

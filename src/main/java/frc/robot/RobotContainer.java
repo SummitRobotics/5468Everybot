@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -85,6 +86,7 @@ public class RobotContainer {
         gyro.setAngleAdjustment(180);
         // Sets drivetrain back to 0, reducing acumulated error
         drivetrain.setPose(new Pose2d(0, 0, new Rotation2d(Math.PI)));
+        PathPlannerServer.startServer(5468);
     }
 
     public void robotPeriodic() {
