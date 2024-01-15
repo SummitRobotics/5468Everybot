@@ -4,6 +4,8 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -83,7 +85,6 @@ public class RobotContainer {
     public void robotInit() {
         gyro.calibrate();
         gyro.reset();
-        gyro.setAngleAdjustment(180);
         // Sets drivetrain back to 0, reducing acumulated error
         drivetrain.setPose(new Pose2d(0, 0, new Rotation2d(Math.PI)));
         PathPlannerServer.startServer(5468);
@@ -96,6 +97,13 @@ public class RobotContainer {
     private void initTelemetry() {
         SmartDashboard.putData("Drivetrain", drivetrain);
         SmartDashboard.putData("Auto Choice", autoChooser);
+        SmartDashboard.putData("Controller", new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.addDoubleProperty("Left X", controller.leftX::get, null);     
+                builder.addDoubleProperty("Left Y", controller.leftY::get, null);
+            }
+        });
     }
 
     private void createAutoCommands() {
